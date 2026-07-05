@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Demz TMVN Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            color: #ffffff;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Container utama 9:16 */
+        .app-container {
+            width: 100%;
+            height: 100%;
+            max-width: 430px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        /* HEADER - lebih besar */
+        .header {
+            background: #cc0000;
+            padding: 18px 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            min-height: 65px;
+        }
+
+        .header span {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .logo-icon {
+            font-size: 28px;
+        }
+
+        /* KONTEN - lebih besar dan full */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 16px 12px;
+            background: #1e1e1e;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .content::-webkit-scrollbar-track {
+            background: #222;
+        }
+        .content::-webkit-scrollbar-thumb {
+            background: #cc0000;
+            border-radius: 10px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* INFO CARD - lebih besar */
+        .info-card {
+            background: #2a2a2a;
+            border-radius: 16px;
+            padding: 22px 20px;
+            margin-bottom: 18px;
+            border-left: 5px solid #cc0000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .info-card h3 {
+            color: #cc0000;
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .info-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 12px;
+        }
+
+        .info-card .btn-primary {
+            display: block;
+            background: #cc0000;
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 17px;
+            text-decoration: none;
+            margin: 10px 0;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .info-card .btn-primary:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        .info-card .btn-wa {
+            display: block;
+            background: #25D366;
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 17px;
+            text-decoration: none;
+            margin: 10px 0;
+            transition: 0.2s;
+        }
+
+        .info-card .btn-wa:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        /* PRODUCT GRID - lebih besar */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .product-card {
+            background: #2a2a2a;
+            border-radius: 14px;
+            padding: 20px 12px;
+            text-align: center;
+            border-left: 4px solid #cc0000;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-card:active {
+            transform: scale(0.95);
+            background: #333;
+        }
+
+        .product-card .name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .product-card .price {
+            color: #ff6b6b;
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        .product-card .badge {
+            background: #cc0000;
+            color: #fff;
+            font-size: 11px;
+            padding: 3px 14px;
+            border-radius: 20px;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #cc0000;
+            margin: 8px 0 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* FEE LIST - lebih besar */
+        .fee-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .fee-list li {
+            background: #2a2a2a;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #cc0000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .fee-list .fee-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .fee-list .fee-price {
+            color: #ff6b6b;
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        /* NAVIGASI BAWAH - lebih besar */
+        .bottom-nav {
+            display: flex;
+            background: #111;
+            border-top: 3px solid #cc0000;
+            flex-shrink: 0;
+            height: 75px;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            background: transparent;
+            padding: 6px 0;
+            gap: 3px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-item.active {
+            color: #cc0000;
+            background: #1a1a1a;
+        }
+
+        .nav-item:active {
+            transform: scale(0.92);
+        }
+
+        .nav-item .icon {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .nav-item .label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        /* Text helper */
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: #888;
+            font-size: 14px;
+        }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .gap-5 { gap: 5px; }
+
+        /* Responsive untuk HP kecil */
+        @media (max-width: 380px) {
+            .product-grid {
+                gap: 10px;
+            }
+            .product-card {
+                padding: 14px 10px;
+                min-height: 75px;
+            }
+            .product-card .name {
+                font-size: 13px;
+            }
+            .product-card .price {
+                font-size: 15px;
+            }
+            .header {
+                font-size: 18px;
+                padding: 14px;
+                min-height: 55px;
+            }
+            .bottom-nav {
+                height: 65px;
+            }
+            .nav-item .icon {
+                font-size: 24px;
+            }
+            .info-card {
+                padding: 18px 15px;
+            }
+            .info-card h3 {
+                font-size: 18px;
+            }
+        }
+
+        /* Untuk HP besar */
+        @media (min-width: 431px) {
+            .app-container {
+                border-left: 1px solid #333;
+                border-right: 1px solid #333;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <span class="logo-icon">🔥</span>
+        <span>Demz TMVN Store</span>
+    </div>
+
+    <!-- KONTEN -->
+    <div class="content" id="contentArea">
+
+        <!-- PAGE 1: BERANDA -->
+        <div class="page active" id="pageBeranda">
+            <div class="info-card">
+                <h3>🔍 Cek Keaslian</h3>
+                <p>Verifikasi keaslian produk dan layanan resmi Demz TMVN. Pastikan Anda membeli dari sumber terpercaya!</p>
+                <a href="https://lynk.id/demztmvn" target="_blank" class="btn-primary">✅ Cek di Lynk.id</a>
+                <a href="https://wa.me/6283831960212" target="_blank" class="btn-wa">💬 Hubungi Admin via WhatsApp</a>
+            </div>
+            <div class="text-center text-muted">
+                ⚡ Pastikan hanya bertransaksi dengan akun resmi Demz TMVN
+            </div>
+        </div>
+
+        <!-- PAGE 2: PRODUK -->
+        <div class="page" id="pageProduk">
+            <div class="section-title">📦 Daftar Produk</div>
+            <div class="product-grid">
+                <div class="product-card" onclick="waOrder('Jasa Rebind (2k)')">
+                    <div class="name">Jasa Rebind</div>
+                    <div class="price">Rp 2.000</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Jasa Bikin Web Topup (150k)')">
+                    <div class="name">Jasa Bikin Web Topup</div>
+                    <div class="price">Rp 150.000</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Jasa Logo (0-10k)')">
+                    <div class="name">Jasa Logo</div>
+                    <div class="price">Rp 0 - 10.000</div>
+                </div>
+                <div class="product-card" onclick="waOrder('APK Premium - Am Prem 1th 3k')">
+                    <div class="name">APK Premium</div>
+                    <div class="price">Am Prem 1th 3k</div>
+                    <span class="badge">Hemat</span>
+                </div>
+                <div class="product-card" onclick="waOrder('Canva 1 Bulan 3k')">
+                    <div class="name">Canva Premium</div>
+                    <div class="price">1 Bulan 3k</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Jaspost (JP)')">
+                    <div class="name">Jaspost (JP)</div>
+                    <div class="price">Hubungi Admin</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Rekber (MC)')">
+                    <div class="name">Rekber (MC)</div>
+                    <div class="price">Hubungi Admin</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Impulse 5GB 110k')">
+                    <div class="name">Impulse 5GB</div>
+                    <div class="price">Rp 110.000</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Jebol VDA')">
+                    <div class="name">Jebol VDA</div>
+                    <div class="price">Hubungi Admin</div>
+                </div>
+                <div class="product-card" onclick="waOrder('Jebol Seslog')">
+                    <div class="name">Jebol Seslog</div>
+                    <div class="price">Hubungi Admin</div>
+                </div>
+            </div>
+            <div class="text-center text-muted mt-10">
+                Klik produk untuk order via WhatsApp
+            </div>
+        </div>
+
+        <!-- PAGE 3: PAYMENT -->
+        <div class="page" id="pagePayment">
+            <div class="info-card">
+                <h3>💳 Payment Center</h3>
+                <p>Klik tombol di bawah untuk melihat metode pembayaran lengkap.</p>
+                <a href="https://tinyurl.com/Payment-Demz-Tmvn" target="_blank" class="btn-primary">💲 Buka Halaman Payment</a>
+                <p class="text-muted" style="font-size:14px;">Support: QRIS, Bank Transfer, E-Wallet</p>
+            </div>
+        </div>
+
+        <!-- PAGE 4: FEE MC -->
+        <div class="page" id="pageFeeMc">
+            <div class="info-card">
+                <h3>📋 List Fee MC</h3>
+                <p style="font-size:15px; margin-bottom:14px;">Harga jasa Rekber (MC) terbaru:</p>
+                <ul class="fee-list">
+                    <li><span class="fee-name">MC 1jt - 5jt</span><span class="fee-price">Rp 15.000</span></li>
+                    <li><span class="fee-name">MC 5jt - 10jt</span><span class="fee-price">Rp 25.000</span></li>
+                    <li><span class="fee-name">MC 10jt - 25jt</span><span class="fee-price">Rp 50.000</span></li>
+                    <li><span class="fee-name">MC 25jt - 50jt</span><span class="fee-price">Rp 100.000</span></li>
+                    <li><span class="fee-name">MC 50jt - 100jt</span><span class="fee-price">Rp 200.000</span></li>
+                    <li><span class="fee-name">MC > 100jt</span><span class="fee-price">Negosiasi</span></li>
+                </ul>
+                <div class="text-center mt-10">
+                    <a href="https://files.catbox.moe/6a2hw0.jpg" target="_blank" style="color:#cc0000; font-weight:700; font-size:16px; text-decoration:none;">📸 Lihat Gambar Detail</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGASI BAWAH -->
+    <div class="bottom-nav">
+        <button class="nav-item active" data-page="pageBeranda">
+            <span class="icon">🏠</span>
+            <span class="label">Beranda</span>
+        </button>
+        <button class="nav-item" data-page="pageProduk">
+            <span class="icon">📦</span>
+            <span class="label">Produk</span>
+        </button>
+        <button class="nav-item" data-page="pagePayment">
+            <span class="icon">💳</span>
+            <span class="label">Payment</span>
+        </button>
+        <button class="nav-item" data-page="pageFeeMc">
+            <span class="icon">📋</span>
+            <span class="label">Fee MC</span>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    // ===== NAVIGASI =====
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = {
+        pageBeranda: document.getElementById('pageBeranda'),
+        pageProduk: document.getElementById('pageProduk'),
+        pagePayment: document.getElementById('pagePayment'),
+        pageFeeMc: document.getElementById('pageFeeMc')
+    };
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Hapus active semua nav
+            navItems.forEach(n => n.classList.remove('active'));
+            this.classList.add('active');
+
+            // Sembunyikan semua page
+            Object.values(pages).forEach(p => p.classList.remove('active'));
+
+            // Tampilkan page target
+            const target = this.dataset.page;
+            if (pages[target]) {
+                pages[target].classList.add('active');
+            }
+
+            // Scroll ke atas
+            document.getElementById('contentArea').scrollTop = 0;
+        });
+    });
+
+    // ===== FUNGSI ORDER WA =====
+    function waOrder(productName) {
+        const phone = '6283831960212';
+        const message = `Halo Admin Demz TMVN, saya mau order: ${productName}`;
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    }
+
+    // ===== CEK APAKAH SEMUA BERJALAN =====
+    console.log('✅ Demz TMVN Store siap 100%');
+    console.log('📱 Rasio 9:16 - Ukuran disesuaikan');
+    console.log('🔥 Support WA Bisnis & Biasa');
+</script>
+
+</body>
+</html>
